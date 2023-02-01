@@ -11,6 +11,7 @@ Rule 5     action -> WEBSITE NAME
 Rule 6     action -> VIDEO NAME
 Rule 7     action -> DIRECTORY PATH
 Rule 8     action -> FILE NAME
+Rule 9     command -> SYS
 
 Terminals, with rules where they appear
 
@@ -22,6 +23,7 @@ NAME                 : 4 5 6 8
 OPEN                 : 1
 PATH                 : 7
 PLAY                 : 3
+SYS                  : 9
 VIDEO                : 6
 WEBSITE              : 5
 error                : 
@@ -39,10 +41,12 @@ state 0
     (1) command -> . OPEN action
     (2) command -> . CLOSE action
     (3) command -> . PLAY action
+    (9) command -> . SYS
 
     OPEN            shift and go to state 2
     CLOSE           shift and go to state 3
     PLAY            shift and go to state 4
+    SYS             shift and go to state 5
 
     command                        shift and go to state 1
 
@@ -61,13 +65,13 @@ state 2
     (7) action -> . DIRECTORY PATH
     (8) action -> . FILE NAME
 
-    APP             shift and go to state 6
-    WEBSITE         shift and go to state 7
-    VIDEO           shift and go to state 8
-    DIRECTORY       shift and go to state 9
-    FILE            shift and go to state 10
+    APP             shift and go to state 7
+    WEBSITE         shift and go to state 8
+    VIDEO           shift and go to state 9
+    DIRECTORY       shift and go to state 10
+    FILE            shift and go to state 11
 
-    action                         shift and go to state 5
+    action                         shift and go to state 6
 
 state 3
 
@@ -78,13 +82,13 @@ state 3
     (7) action -> . DIRECTORY PATH
     (8) action -> . FILE NAME
 
-    APP             shift and go to state 6
-    WEBSITE         shift and go to state 7
-    VIDEO           shift and go to state 8
-    DIRECTORY       shift and go to state 9
-    FILE            shift and go to state 10
+    APP             shift and go to state 7
+    WEBSITE         shift and go to state 8
+    VIDEO           shift and go to state 9
+    DIRECTORY       shift and go to state 10
+    FILE            shift and go to state 11
 
-    action                         shift and go to state 11
+    action                         shift and go to state 12
 
 state 4
 
@@ -95,99 +99,106 @@ state 4
     (7) action -> . DIRECTORY PATH
     (8) action -> . FILE NAME
 
-    APP             shift and go to state 6
-    WEBSITE         shift and go to state 7
-    VIDEO           shift and go to state 8
-    DIRECTORY       shift and go to state 9
-    FILE            shift and go to state 10
+    APP             shift and go to state 7
+    WEBSITE         shift and go to state 8
+    VIDEO           shift and go to state 9
+    DIRECTORY       shift and go to state 10
+    FILE            shift and go to state 11
 
-    action                         shift and go to state 12
+    action                         shift and go to state 13
 
 state 5
+
+    (9) command -> SYS .
+
+    $end            reduce using rule 9 (command -> SYS .)
+
+
+state 6
 
     (1) command -> OPEN action .
 
     $end            reduce using rule 1 (command -> OPEN action .)
 
 
-state 6
-
-    (4) action -> APP . NAME
-
-    NAME            shift and go to state 13
-
-
 state 7
 
-    (5) action -> WEBSITE . NAME
+    (4) action -> APP . NAME
 
     NAME            shift and go to state 14
 
 
 state 8
 
-    (6) action -> VIDEO . NAME
+    (5) action -> WEBSITE . NAME
 
     NAME            shift and go to state 15
 
 
 state 9
 
-    (7) action -> DIRECTORY . PATH
+    (6) action -> VIDEO . NAME
 
-    PATH            shift and go to state 16
+    NAME            shift and go to state 16
 
 
 state 10
 
-    (8) action -> FILE . NAME
+    (7) action -> DIRECTORY . PATH
 
-    NAME            shift and go to state 17
+    PATH            shift and go to state 17
 
 
 state 11
+
+    (8) action -> FILE . NAME
+
+    NAME            shift and go to state 18
+
+
+state 12
 
     (2) command -> CLOSE action .
 
     $end            reduce using rule 2 (command -> CLOSE action .)
 
 
-state 12
+state 13
 
     (3) command -> PLAY action .
 
     $end            reduce using rule 3 (command -> PLAY action .)
 
 
-state 13
+state 14
 
     (4) action -> APP NAME .
 
     $end            reduce using rule 4 (action -> APP NAME .)
 
 
-state 14
+state 15
 
     (5) action -> WEBSITE NAME .
 
     $end            reduce using rule 5 (action -> WEBSITE NAME .)
 
 
-state 15
+state 16
 
     (6) action -> VIDEO NAME .
 
     $end            reduce using rule 6 (action -> VIDEO NAME .)
 
 
-state 16
+state 17
 
     (7) action -> DIRECTORY PATH .
 
     $end            reduce using rule 7 (action -> DIRECTORY PATH .)
 
 
-state 17
+state 18
 
     (8) action -> FILE NAME .
 

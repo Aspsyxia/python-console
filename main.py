@@ -1,3 +1,4 @@
+import sys
 import webbrowser
 import AppOpener
 import os
@@ -11,6 +12,7 @@ tokens = (
     'OPEN',
     'CLOSE',
     'PLAY',
+    'SYS',
     'APP',
     'WEBSITE',
     'VIDEO',
@@ -22,7 +24,6 @@ tokens = (
 
 current_dir = ""
 prev_dir = ""
-start = 'command'
 
 
 def t_OPEN(t):
@@ -37,6 +38,11 @@ def t_CLOSE(t):
 
 def t_PLAY(t):
     r"""play"""
+    return t
+
+
+def t_SYS(t):
+    r"""exit|clear|list"""
     return t
 
 
@@ -100,6 +106,15 @@ def p_action(p):
     p[0] = (p[1], p[2])
 
 
+def p_sys(p):
+    """command : SYS"""
+    p[0] = (p[1])
+
+
+def console_clear():
+    os.system('cls')
+
+
 def open_path(path):
     if re.search(r'[Pp]rev(ious)?', path):
         os.chdir(prev_dir)
@@ -116,8 +131,11 @@ def open_app(name):
 def open_file(name):
     files = os.listdir(os.getcwd())
     for file in files:
-        if re.search(f"\s{name}\.txt", file):
-            print(f"found {file}")
+        if re.search(name, file):
+            print(f"opening {file}...")
+            os.startfile(name)
+        else:
+            print("file not found, check name or directory")
 
 
 def open_website(name):
@@ -153,6 +171,13 @@ def process_input(input_tokens):
         elif input_tokens[0] == "play":
             if input_tokens[1][0] == "video":
                 play_video(input_tokens[1][1])
+        elif input_tokens == "exit":
+            sys.exit()
+        elif input_tokens == "list":
+            for file in os.listdir(os.getcwd()):
+                print(file)
+        elif input_tokens == "clear":
+            console_clear()
     except TypeError:
         print("Command unrecognized")
 
@@ -175,7 +200,7 @@ while True:
     try:
         prev_dir = current_dir
         current_dir = os.getcwd()
-        s = input(f"{current_dir}>")
+        s = input(f"{current_dir}>").strip().lower()
         parsed_input = parser.parse(s)
         process_input(parsed_input)
     except EOFError:
