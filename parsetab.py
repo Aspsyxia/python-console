@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'ARGUMENT COMMAND PATHcommand : COMMAND PATH'
+_lr_signature = 'APP CLOSE DIRECTORY FILE NAME OPEN PATH PLAY VIDEO WEBSITE\n    command : OPEN action\n            | CLOSE action\n            | PLAY action\n    \n    action : APP NAME\n           | WEBSITE NAME\n           | VIDEO NAME\n           | DIRECTORY PATH\n           | FILE NAME\n    '
     
-_lr_action_items = {'COMMAND':([0,],[2,]),'$end':([1,3,],[0,-1,]),'PATH':([2,],[3,]),}
+_lr_action_items = {'OPEN':([0,],[2,]),'CLOSE':([0,],[3,]),'PLAY':([0,],[4,]),'$end':([1,5,11,12,13,14,15,16,17,],[0,-1,-2,-3,-4,-5,-6,-7,-8,]),'APP':([2,3,4,],[6,6,6,]),'WEBSITE':([2,3,4,],[7,7,7,]),'VIDEO':([2,3,4,],[8,8,8,]),'DIRECTORY':([2,3,4,],[9,9,9,]),'FILE':([2,3,4,],[10,10,10,]),'NAME':([6,7,8,10,],[13,14,15,17,]),'PATH':([9,],[16,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +17,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'command':([0,],[1,]),}
+_lr_goto_items = {'command':([0,],[1,]),'action':([2,3,4,],[5,11,12,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -27,5 +27,12 @@ for _k, _v in _lr_goto_items.items():
 del _lr_goto_items
 _lr_productions = [
   ("S' -> command","S'",1,None,None,None),
-  ('command -> COMMAND PATH','command',2,'p_command','main.py',27),
+  ('command -> OPEN action','command',2,'p_command','main.py',76),
+  ('command -> CLOSE action','command',2,'p_command','main.py',77),
+  ('command -> PLAY action','command',2,'p_command','main.py',78),
+  ('action -> APP NAME','action',2,'p_action','main.py',85),
+  ('action -> WEBSITE NAME','action',2,'p_action','main.py',86),
+  ('action -> VIDEO NAME','action',2,'p_action','main.py',87),
+  ('action -> DIRECTORY PATH','action',2,'p_action','main.py',88),
+  ('action -> FILE NAME','action',2,'p_action','main.py',89),
 ]
