@@ -1,7 +1,10 @@
+import webbrowser
 import AppOpener
 import os
 import re
 
+from youtubesearchpython import VideosSearch
+from googlesearch import search
 from ply import lex, yacc
 
 tokens = (
@@ -19,6 +22,7 @@ tokens = (
 
 current_dir = ""
 prev_dir = ""
+start = 'command'
 
 
 def t_OPEN(t):
@@ -52,7 +56,7 @@ def t_VIDEO(t):
 
 
 def t_DIRECTORY(t):
-    r"""directory"""
+    r"""dir"""
     return t
 
 
@@ -89,7 +93,7 @@ def p_action(p):
            | FILE NAME
     """
 
-    if not re.search(r'[a-z]:\\((\w+)|\\)*', p[2]):
+    if not re.search(r'[a-zA-Z]:\\((\w+)|\\)*', p[2]):
         p[2] = p[2].replace('"', '')
     else:
         p[2] = p[2].upper()
@@ -99,7 +103,7 @@ def p_action(p):
 def open_path(path):
     if re.search(r'[Pp]rev(ious)?', path):
         os.chdir(prev_dir)
-    elif re.search(r'[a-z]:\\((\w+)|\\)*', path):
+    elif re.search(r'[a-zA-Z]:\\((\w+)|\\)*', path):
         os.chdir(path)
     else:
         print("path name does not exist")
@@ -110,25 +114,51 @@ def open_app(name):
 
 
 def open_file(name):
-    extensions = []
+    files = os.listdir(os.getcwd())
+    for file in files:
+        if re.search(f"\s{name}\.txt", file):
+            print(f"found {file}")
+
+
+def open_website(name):
+    search_query = name
+    search_results = search(search_query, num=2, stop=2)
+    webbrowser.open(next(search_results))
 
 
 def close_app(name):
     AppOpener.close(name)
 
 
-def process_input(input):
-    if input[0] == "open":
-        if input[1][0] == "app":
-            open_app(input[1][1])
-        elif input[1][0] == "directory":
-            open_path(input[1][1])
-        elif input[1][0] == "file":
-            open_file(input[1][1])
+def play_video(name):
+    fetched_data = VideosSearch(name, limit=1)
+    url = fetched_data.result()["result"][0]["link"]
+    webbrowser.open(url)
+
+
+def process_input(input_tokens):
+    try:
+        if input_tokens[0] == "open":
+            if input_tokens[1][0] == "app":
+                open_app(input_tokens[1][1])
+            elif input_tokens[1][0] == "dir":
+                open_path(input_tokens[1][1])
+            elif input_tokens[1][0] == "file":
+                open_file(input_tokens[1][1])
+            elif input_tokens[1][0] == "website":
+                open_website(input_tokens[1][1])
+        elif input_tokens[0] == "close":
+            if input_tokens[1][0] == "app":
+                close_app(input_tokens[1][1])
+        elif input_tokens[0] == "play":
+            if input_tokens[1][0] == "video":
+                play_video(input_tokens[1][1])
+    except TypeError:
+        print("Command unrecognized")
 
 
 def t_error(t):
-    print(f"Illegal character {t.value[0]}")
+    # print(f"Illegal character {t.value[0]}")
     t.lexer.skip(1)
 
 
