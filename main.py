@@ -9,65 +9,29 @@ from googlesearch import search
 from ply import lex, yacc
 
 tokens = (
-    'OPEN',
-    'CLOSE',
-    'PLAY',
+    'ACTION',
+    'TYPE',
     'SYS',
-    'APP',
-    'WEBSITE',
-    'VIDEO',
-    'DIRECTORY',
-    'FILE',
-    'PATH',
-    'NAME'
+    'NAME',
+    'PATH'
 )
 
 current_dir = ""
 prev_dir = ""
 
 
-def t_OPEN(t):
-    r"""open"""
+def t_ACTION(t):
+    r"""open|close|play"""
     return t
 
 
-def t_CLOSE(t):
-    r"""close"""
-    return t
-
-
-def t_PLAY(t):
-    r"""play"""
+def t_TYPE(t):
+    r"""app|(video|movie|song)|website|dir|file"""
     return t
 
 
 def t_SYS(t):
     r"""exit|clear|list"""
-    return t
-
-
-def t_APP(t):
-    r"""app"""
-    return t
-
-
-def t_WEBSITE(t):
-    r"""website"""
-    return t
-
-
-def t_VIDEO(t):
-    r"""video"""
-    return t
-
-
-def t_DIRECTORY(t):
-    r"""dir"""
-    return t
-
-
-def t_FILE(t):
-    r"""file"""
     return t
 
 
@@ -83,20 +47,15 @@ def t_PATH(t):
 
 def p_command(p):
     """
-    command : OPEN action
-            | CLOSE action
-            | PLAY action
+    command : ACTION type
     """
     p[0] = (p[1], p[2])
 
 
-def p_action(p):
+def p_type(p):
     """
-    action : APP NAME
-           | WEBSITE NAME
-           | VIDEO NAME
-           | DIRECTORY PATH
-           | FILE NAME
+    type :  TYPE NAME
+        |   TYPE PATH
     """
 
     if not re.search(r'[a-zA-Z]:\\((\w+)|\\)*', p[2]):
@@ -139,9 +98,14 @@ def open_file(name):
 
 
 def open_website(name):
-    search_query = name
-    search_results = search(search_query, num=2, stop=2)
-    webbrowser.open(next(search_results))
+    search_results = [x for x in search(name, num=5, stop=5)]
+
+    print("Here are 5 first query results")
+    for i in range(0, 5):
+        print(f"{i+1}. {search_results[i]}")
+    choice = int(input("Choose website: "))
+
+    webbrowser.open(search_results[choice-1])
 
 
 def close_app(name):
@@ -149,9 +113,14 @@ def close_app(name):
 
 
 def play_video(name):
-    fetched_data = VideosSearch(name, limit=1)
-    url = fetched_data.result()["result"][0]["link"]
-    webbrowser.open(url)
+    fetched_data = VideosSearch(name, limit=5)
+
+    print("Here are 5 first query results")
+    for i in range(0, 5):
+        print(f'{i+1}. {fetched_data.result()["result"][i]["title"]}')
+    choice = int(input("Choose website: "))
+
+    webbrowser.open(fetched_data.result()["result"][choice-1]["link"])
 
 
 def process_input(input_tokens):
@@ -169,7 +138,7 @@ def process_input(input_tokens):
             if input_tokens[1][0] == "app":
                 close_app(input_tokens[1][1])
         elif input_tokens[0] == "play":
-            if input_tokens[1][0] == "video":
+            if re.search(r'(video|movie|song)', input_tokens[1][0]):
                 play_video(input_tokens[1][1])
         elif input_tokens == "exit":
             sys.exit()

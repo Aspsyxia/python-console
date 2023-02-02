@@ -3,50 +3,35 @@ Created by PLY version 3.11 (http://www.dabeaz.com/ply)
 Grammar
 
 Rule 0     S' -> command
-Rule 1     command -> OPEN action
-Rule 2     command -> CLOSE action
-Rule 3     command -> PLAY action
-Rule 4     action -> APP NAME
-Rule 5     action -> WEBSITE NAME
-Rule 6     action -> VIDEO NAME
-Rule 7     action -> DIRECTORY PATH
-Rule 8     action -> FILE NAME
-Rule 9     command -> SYS
+Rule 1     command -> ACTION type
+Rule 2     type -> TYPE NAME
+Rule 3     type -> TYPE PATH
+Rule 4     command -> SYS
 
 Terminals, with rules where they appear
 
-APP                  : 4
-CLOSE                : 2
-DIRECTORY            : 7
-FILE                 : 8
-NAME                 : 4 5 6 8
-OPEN                 : 1
-PATH                 : 7
-PLAY                 : 3
-SYS                  : 9
-VIDEO                : 6
-WEBSITE              : 5
+ACTION               : 1
+NAME                 : 2
+PATH                 : 3
+SYS                  : 4
+TYPE                 : 2 3
 error                : 
 
 Nonterminals, with rules where they appear
 
-action               : 1 2 3
 command              : 0
+type                 : 1
 
 Parsing method: LALR
 
 state 0
 
     (0) S' -> . command
-    (1) command -> . OPEN action
-    (2) command -> . CLOSE action
-    (3) command -> . PLAY action
-    (9) command -> . SYS
+    (1) command -> . ACTION type
+    (4) command -> . SYS
 
-    OPEN            shift and go to state 2
-    CLOSE           shift and go to state 3
-    PLAY            shift and go to state 4
-    SYS             shift and go to state 5
+    ACTION          shift and go to state 2
+    SYS             shift and go to state 3
 
     command                        shift and go to state 1
 
@@ -58,149 +43,47 @@ state 1
 
 state 2
 
-    (1) command -> OPEN . action
-    (4) action -> . APP NAME
-    (5) action -> . WEBSITE NAME
-    (6) action -> . VIDEO NAME
-    (7) action -> . DIRECTORY PATH
-    (8) action -> . FILE NAME
+    (1) command -> ACTION . type
+    (2) type -> . TYPE NAME
+    (3) type -> . TYPE PATH
 
-    APP             shift and go to state 7
-    WEBSITE         shift and go to state 8
-    VIDEO           shift and go to state 9
-    DIRECTORY       shift and go to state 10
-    FILE            shift and go to state 11
+    TYPE            shift and go to state 5
 
-    action                         shift and go to state 6
+    type                           shift and go to state 4
 
 state 3
 
-    (2) command -> CLOSE . action
-    (4) action -> . APP NAME
-    (5) action -> . WEBSITE NAME
-    (6) action -> . VIDEO NAME
-    (7) action -> . DIRECTORY PATH
-    (8) action -> . FILE NAME
+    (4) command -> SYS .
 
-    APP             shift and go to state 7
-    WEBSITE         shift and go to state 8
-    VIDEO           shift and go to state 9
-    DIRECTORY       shift and go to state 10
-    FILE            shift and go to state 11
+    $end            reduce using rule 4 (command -> SYS .)
 
-    action                         shift and go to state 12
 
 state 4
 
-    (3) command -> PLAY . action
-    (4) action -> . APP NAME
-    (5) action -> . WEBSITE NAME
-    (6) action -> . VIDEO NAME
-    (7) action -> . DIRECTORY PATH
-    (8) action -> . FILE NAME
+    (1) command -> ACTION type .
 
-    APP             shift and go to state 7
-    WEBSITE         shift and go to state 8
-    VIDEO           shift and go to state 9
-    DIRECTORY       shift and go to state 10
-    FILE            shift and go to state 11
+    $end            reduce using rule 1 (command -> ACTION type .)
 
-    action                         shift and go to state 13
 
 state 5
 
-    (9) command -> SYS .
+    (2) type -> TYPE . NAME
+    (3) type -> TYPE . PATH
 
-    $end            reduce using rule 9 (command -> SYS .)
+    NAME            shift and go to state 6
+    PATH            shift and go to state 7
 
 
 state 6
 
-    (1) command -> OPEN action .
+    (2) type -> TYPE NAME .
 
-    $end            reduce using rule 1 (command -> OPEN action .)
+    $end            reduce using rule 2 (type -> TYPE NAME .)
 
 
 state 7
 
-    (4) action -> APP . NAME
+    (3) type -> TYPE PATH .
 
-    NAME            shift and go to state 14
-
-
-state 8
-
-    (5) action -> WEBSITE . NAME
-
-    NAME            shift and go to state 15
-
-
-state 9
-
-    (6) action -> VIDEO . NAME
-
-    NAME            shift and go to state 16
-
-
-state 10
-
-    (7) action -> DIRECTORY . PATH
-
-    PATH            shift and go to state 17
-
-
-state 11
-
-    (8) action -> FILE . NAME
-
-    NAME            shift and go to state 18
-
-
-state 12
-
-    (2) command -> CLOSE action .
-
-    $end            reduce using rule 2 (command -> CLOSE action .)
-
-
-state 13
-
-    (3) command -> PLAY action .
-
-    $end            reduce using rule 3 (command -> PLAY action .)
-
-
-state 14
-
-    (4) action -> APP NAME .
-
-    $end            reduce using rule 4 (action -> APP NAME .)
-
-
-state 15
-
-    (5) action -> WEBSITE NAME .
-
-    $end            reduce using rule 5 (action -> WEBSITE NAME .)
-
-
-state 16
-
-    (6) action -> VIDEO NAME .
-
-    $end            reduce using rule 6 (action -> VIDEO NAME .)
-
-
-state 17
-
-    (7) action -> DIRECTORY PATH .
-
-    $end            reduce using rule 7 (action -> DIRECTORY PATH .)
-
-
-state 18
-
-    (8) action -> FILE NAME .
-
-    $end            reduce using rule 8 (action -> FILE NAME .)
+    $end            reduce using rule 3 (type -> TYPE PATH .)
 

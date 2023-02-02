@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'APP CLOSE DIRECTORY FILE NAME OPEN PATH PLAY SYS VIDEO WEBSITE\n    command : OPEN action\n            | CLOSE action\n            | PLAY action\n    \n    action : APP NAME\n           | WEBSITE NAME\n           | VIDEO NAME\n           | DIRECTORY PATH\n           | FILE NAME\n    command : SYS'
+_lr_signature = 'ACTION NAME PATH SYS TYPE\n    command : ACTION type\n    \n    type :  TYPE NAME\n        |   TYPE PATH\n    command : SYS'
     
-_lr_action_items = {'OPEN':([0,],[2,]),'CLOSE':([0,],[3,]),'PLAY':([0,],[4,]),'SYS':([0,],[5,]),'$end':([1,5,6,12,13,14,15,16,17,18,],[0,-9,-1,-2,-3,-4,-5,-6,-7,-8,]),'APP':([2,3,4,],[7,7,7,]),'WEBSITE':([2,3,4,],[8,8,8,]),'VIDEO':([2,3,4,],[9,9,9,]),'DIRECTORY':([2,3,4,],[10,10,10,]),'FILE':([2,3,4,],[11,11,11,]),'NAME':([7,8,9,11,],[14,15,16,18,]),'PATH':([10,],[17,]),}
+_lr_action_items = {'ACTION':([0,],[2,]),'SYS':([0,],[3,]),'$end':([1,3,4,6,7,],[0,-4,-1,-2,-3,]),'TYPE':([2,],[5,]),'NAME':([5,],[6,]),'PATH':([5,],[7,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +17,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'command':([0,],[1,]),'action':([2,3,4,],[6,12,13,]),}
+_lr_goto_items = {'command':([0,],[1,]),'type':([2,],[4,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -27,13 +27,8 @@ for _k, _v in _lr_goto_items.items():
 del _lr_goto_items
 _lr_productions = [
   ("S' -> command","S'",1,None,None,None),
-  ('command -> OPEN action','command',2,'p_command','main.py',86),
-  ('command -> CLOSE action','command',2,'p_command','main.py',87),
-  ('command -> PLAY action','command',2,'p_command','main.py',88),
-  ('action -> APP NAME','action',2,'p_action','main.py',95),
-  ('action -> WEBSITE NAME','action',2,'p_action','main.py',96),
-  ('action -> VIDEO NAME','action',2,'p_action','main.py',97),
-  ('action -> DIRECTORY PATH','action',2,'p_action','main.py',98),
-  ('action -> FILE NAME','action',2,'p_action','main.py',99),
-  ('command -> SYS','command',1,'p_sys','main.py',110),
+  ('command -> ACTION type','command',2,'p_command','main.py',50),
+  ('type -> TYPE NAME','type',2,'p_type','main.py',57),
+  ('type -> TYPE PATH','type',2,'p_type','main.py',58),
+  ('command -> SYS','command',1,'p_sys','main.py',69),
 ]
